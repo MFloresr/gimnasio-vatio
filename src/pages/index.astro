@@ -1,0 +1,146 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Preguntas from '../components/Preguntas.astro';
+import Marcador from '../components/Marcador.astro';
+import AbiertoAhora from '../components/AbiertoAhora.astro';
+import { getTarifas, getOpiniones, getEntrenadores, getEntradas } from '../lib/contenido';
+import { sitio } from '../lib/sitio';
+import { euros, NOMBRE_TIPO } from '../lib/util';
+import crossfit from '../assets/fotos/crossfit.jpg';
+import kettlebell from '../assets/fotos/kettlebell-competicion.jpg';
+import gymnation from '../assets/fotos/gymnation.jpg';
+import remo from '../assets/fotos/remo.jpg';
+
+const tarifas = await getTarifas();
+const opiniones = await getOpiniones();
+const entrenadores = await getEntrenadores();
+const entradas = (await getEntradas()).slice(0, 3);
+const tipos = [
+  { id: 'fuerza', texto: 'Barra, mancuernas y pesa rusa. Aprende a levantar bien y sube peso con cabeza.' },
+  { id: 'cardio', texto: 'Intervalos, circuitos y remo. Sudor en cuarenta minutos.' },
+  { id: 'combate', texto: 'Boxeo fitness al saco, sin combates. Descarga la semana.' },
+  { id: 'movilidad', texto: 'Yoga, core y estiramientos para entrenar mejor y lesionarse menos.' },
+];
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'ExerciseGym',
+  name: sitio.nombre,
+  description: sitio.descripcion,
+  telephone: sitio.telefono,
+  email: sitio.email,
+  address: { '@type': 'PostalAddress', streetAddress: sitio.direccion.calle, postalCode: sitio.direccion.cp, addressLocality: sitio.direccion.ciudad, addressCountry: 'ES' },
+};
+---
+
+<Base titulo="Gimnasio con clases dirigidas y sala de fuerza" jsonld={jsonld}>
+  <section class="hero">
+    <div class="contenedor hero__fila">
+      <div class="hero__texto">
+        <h1>Entrena <mark>hoy</mark></h1>
+        <p>Clases dirigidas, sala de fuerza y entrenadores que te corrigen. Mira lo que hay ahora y reserva tu plaza.</p>
+        <div class="hero__acciones">
+          <a class="btn btn--negro" href="/prueba-gratis/">Semana gratis</a>
+          <a class="btn btn--blanco" href="/clases/">Ver horario</a>
+        </div>
+        <p style="margin-top:22px;font-weight:800"><AbiertoAhora /></p>
+      </div>
+      <Marcador />
+    </div>
+  </section>
+  <div class="cinta-peligro" aria-hidden="true"></div>
+
+  <section class="franja franja--clara">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>Cuatro formas de sudar</h2><p>Todas tienen versión para principiantes. Todas terminan con ganas de repetir.</p></div>
+      <div class="tipos">
+        {tipos.map((t) => (
+          <a class="tipo" href={`/clases/?tipo=${t.id}`}>
+            <h3>{NOMBRE_TIPO[t.id]}</h3>
+            <p>{t.texto}</p>
+            <span class="led">VER CLASES</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="franja">
+    <div class="contenedor mosaico">
+      <div class="foto-bn alta"><Image src={crossfit} alt="Sala de entrenamiento funcional con cuerdas, cajones y personas entrenando" widths={[500, 800, 1200]} sizes="(min-width: 900px) 45vw, 100vw" style="aspect-ratio:3/4" /></div>
+      <div class="foto-bn"><Image src={kettlebell} alt="Pesa rusa de competición en el suelo" widths={[400, 700]} sizes="(min-width: 900px) 25vw, 50vw" /></div>
+      <div class="foto-bn"><Image src={remo} alt="Máquinas de remo indoor en fila" widths={[400, 700]} sizes="(min-width: 900px) 25vw, 50vw" /></div>
+      <div class="foto-bn" style="grid-column: span 2"><Image src={gymnation} alt="Interior de un gimnasio con máquinas y pesas" widths={[600, 1000]} sizes="(min-width: 900px) 50vw, 100vw" style="aspect-ratio:16/7" /></div>
+    </div>
+  </section>
+
+  <section class="franja franja--negra">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 style="color:var(--senal)">Vatio en números</h2></div>
+      <div class="cifras" style="color:var(--tinta)">
+        <div class="cifra"><b>940</b><span>metros cuadrados</span></div>
+        <div class="cifra"><b>35</b><span>clases a la semana</span></div>
+        <div class="cifra"><b>4</b><span>entrenadores</span></div>
+        <div class="cifra"><b>6:30</b><span>abrimos a primera hora</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="franja">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>Tarifas</h2><a class="btn btn--peq" href="/tarifas/">Calcula tu cuota</a></div>
+      <div class="planes">
+        {tarifas.map((t) => (
+          <article class={`plan ${t.data.destacada ? 'plan--destacado' : ''}`}>
+            <h3>{t.data.nombre}</h3>
+            <p class="precio num"><span class="led">{t.data.mensual}</span> <small>€ al mes</small></p>
+            <p style="margin:0;font-weight:700">{t.data.clasesSemana}</p>
+            <ul>{t.data.incluye.map((i) => <li>{i}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="franja franja--amarilla">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>Entrenadores</h2><a class="btn btn--peq btn--negro" href="/entrenadores/">Conócelos</a></div>
+      <div class="equipo">
+        {entrenadores.map((e) => (
+          <article class="entrenador"><h3>{e.data.nombre}</h3><p class="esp" style="margin:0">{e.data.especialidad}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="franja franja--negra">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 style="color:var(--senal)">Lo que dicen</h2></div>
+      <div class="opiniones">
+        {opiniones.map((o) => (
+          <figure class="opinion"><blockquote>«{o.data.texto}»</blockquote><figcaption><strong>{o.data.nombre}</strong>Socia o socio desde hace {o.data.meses} meses</figcaption></figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="franja">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>Consejos</h2><a class="btn btn--peq" href="/consejos/">Ver todos</a></div>
+      <div class="entradas">
+        {entradas.map((e) => (
+          <article class="entrada">
+            <Image src={e.data.foto} alt={e.data.fotoAlt} widths={[400, 700]} sizes="(min-width: 960px) 30vw, 100vw" />
+            <div class="entrada__cuerpo">
+              <p class="entrada__meta">{e.data.categoria} · {e.data.minutos} min</p>
+              <h3><a href={`/consejos/${e.id}/`}>{e.data.titulo}</a></h3>
+              <p>{e.data.resumen}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="franja franja--clara"><div class="contenedor"><Preguntas titulo="Preguntas frecuentes" /></div></section>
+</Base>

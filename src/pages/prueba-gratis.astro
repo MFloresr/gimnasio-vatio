@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Formulario from '../components/Formulario.astro';
+import { NOMBRE_TIPO } from '../lib/util';
+---
+
+<Base titulo="Semana gratis" descripcion="Prueba Vatio durante una semana, con sala y hasta tres clases dirigidas. Solo necesitas un documento de identidad.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Semana gratis</h1>
+    <p>Siete días con sala y hasta tres clases dirigidas. Sin tarjeta y sin permanencia.</p>
+  </div>
+  <section class="franja" style="padding-top:20px">
+    <div class="contenedor dos dos--desigual" style="align-items:start">
+      <Formulario tipo="prueba" boton="Quiero mi semana" mensajeOk="Solicitud recibida. Te llamamos para elegir el día de inicio.">
+        <div><label for="p-nombre">Nombre <span class="marca" aria-hidden="true">*</span></label><input id="p-nombre" name="nombre" type="text" autocomplete="name" required /><p class="error" data-error-para="nombre"></p></div>
+        <div><label for="p-tel">Teléfono <span class="marca" aria-hidden="true">*</span></label><input id="p-tel" name="telefono" type="tel" autocomplete="tel" required pattern="[0-9 +]{9,}" title="Escribe un teléfono de al menos 9 cifras" /><p class="error" data-error-para="telefono"></p></div>
+        <div class="ancho-total"><label for="p-email">Correo (opcional)</label><input id="p-email" name="email" type="email" autocomplete="email" /></div>
+        <div>
+          <label for="p-obj">¿Qué quieres conseguir?</label>
+          <select id="p-obj" name="objetivo"><option value="">Aún no lo sé</option><option>Ganar fuerza</option><option>Perder grasa</option><option>Mejorar la espalda y la movilidad</option><option>Soltar estrés</option><option>Aprender técnica</option></select>
+        </div>
+        <div>
+          <label for="p-niv">Tu nivel</label>
+          <select id="p-niv" name="nivel"><option>Empiezo</option><option>Entreno a veces</option><option>Entreno con regularidad</option></select>
+        </div>
+        <div class="ancho-total"><label for="p-fecha">¿Cuándo quieres empezar?</label><input id="p-fecha" name="fecha" type="date" /></div>
+        <div class="ancho-total"><p class="ayuda">No te pedimos datos de salud. Si tienes alguna lesión o condición médica, cuéntaselo al entrenador en persona.</p></div>
+      </Formulario>
+      <aside>
+        <h2 style="font-size:2.4rem">Qué incluye</h2>
+        <ul class="lista">
+          <li>Siete días de acceso a la sala.</li>
+          <li>Hasta tres clases dirigidas.</li>
+          <li>Una valoración inicial con un entrenador.</li>
+          <li>Sin tarjeta y sin permanencia.</li>
+        </ul>
+        <p class="letra-pequena">Necesitas un documento de identidad. Para menores de 18 años hace falta la autorización de un adulto responsable.</p>
+      </aside>
+    </div>
+  </section>
+</Base>

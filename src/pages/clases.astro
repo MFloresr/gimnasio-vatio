@@ -1,0 +1,152 @@
+---
+import Base from '../layouts/Base.astro';
+import Preguntas from '../components/Preguntas.astro';
+import Formulario from '../components/Formulario.astro';
+import { getHorario } from '../lib/horario';
+import { getClases } from '../lib/contenido';
+import { TIPOS } from '../content.config';
+import { NOMBRE_TIPO, NOMBRE_DIA, NIVEL } from '../lib/util';
+
+const horario = await getHorario();
+const clases = await getClases();
+const orden = [1, 2, 3, 4, 5, 6, 0];
+---
+
+<Base titulo="Horario de clases y reserva" descripcion="Todas las clases dirigidas de la semana con plazas libres. Filtra por tipo, día y nivel y reserva tu plaza.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Horario</h1>
+    <p>Filtra, elige y reserva. Las plazas son limitadas para que el entrenador pueda corregirte.</p>
+  </div>
+
+  <section class="franja" style="padding-top:20px" id="horario" data-horario={JSON.stringify(horario)}>
+    <div class="contenedor">
+      <form class="filtros" id="filtros" aria-label="Filtros del horario">
+        <fieldset>
+          <legend>Tipo</legend>
+          <div class="chips">
+            <label><input type="radio" name="tipo" value="" checked /><span>Todas</span></label>
+            {TIPOS.map((t) => <label><input type="radio" name="tipo" value={t} /><span>{NOMBRE_TIPO[t]}</span></label>)}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Día</legend>
+          <div class="chips">
+            <label><input type="radio" name="dia" value="" checked /><span>Toda la semana</span></label>
+            {orden.map((d) => <label><input type="radio" name="dia" value={d} /><span>{NOMBRE_DIA[d].slice(0, 3)}</span></label>)}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Mi nivel</legend>
+          <div class="chips">
+            <label><input type="radio" name="nivel" value="" checked /><span>Cualquiera</span></label>
+            <label><input type="radio" name="nivel" value="1" /><span>Empiezo</span></label>
+            <label><input type="radio" name="nivel" value="2" /><span>Entreno ya</span></label>
+          </div>
+        </fieldset>
+      </form>
+      <p id="resultados" role="status" aria-live="polite" style="font-weight:800;margin:0 0 16px"></p>
+
+      {orden.map((d) => (
+        <section class="dia-bloque" data-dia={d} aria-labelledby={`d-${d}`}>
+          <h2 id={`d-${d}`}>{NOMBRE_DIA[d]} <small class="fecha-dia" data-dia={d}></small></h2>
+          {horario.filter((s) => s.dia === d).map((s) => (
+            <article class="sesion" data-tipo={s.tipo} data-nivel={s.nivel} data-id={s.id}>
+              <span class="hora led">{s.hora}</span>
+              <div>
+                <h3>{s.nombre}</h3>
+                <p class="meta" style="margin:0">{s.entrenador} · {s.duracion} min · {s.sala}</p>
+              </div>
+              <div class="meta"><span class="solo-lectores">Intensidad {s.intensidad} de 5. </span><span aria-hidden="true">Intensidad<span class="barra">{[1, 2, 3, 4, 5].map((n) => <i class={n <= s.intensidad ? 'on' : ''}></i>)}</span></span>{NIVEL[s.nivel]}</div>
+              <span class="plazas led" data-plazas={s.plazas}></span>
+              <button class="btn btn--peq" type="button" data-reservar={s.id}>Reservar<span class="solo-lectores"> {s.nombre}, {NOMBRE_DIA[s.dia]} a las {s.hora}</span></button>
+            </article>
+          ))}
+        </section>
+      ))}
+      <p class="vacio" id="vacio" hidden style="font-weight:800">No hay clases con esos filtros. Prueba a quitar alguno.</p>
+    </div>
+  </section>
+
+  <dialog id="dialogo-reserva" aria-labelledby="dialogo-titulo">
+    <div class="dialogo__cabeza">
+      <div><h2 id="dialogo-titulo">Reservar plaza</h2><p id="dialogo-detalle"></p></div>
+      <button type="button" id="dialogo-cerrar" aria-label="Cerrar">X</button>
+    </div>
+    <div class="dialogo__cuerpo">
+      <Formulario tipo="reserva-clase" boton="Confirmar reserva" mensajeOk="Plaza reservada. Te enviamos un recordatorio por mensaje.">
+        <input type="hidden" name="sesion" id="campo-sesion" />
+        <input type="hidden" name="fecha" id="campo-fecha" />
+        <div><label for="r-nombre">Nombre <span class="marca" aria-hidden="true">*</span></label><input id="r-nombre" name="nombre" type="text" autocomplete="name" required /><p class="error" data-error-para="nombre"></p></div>
+        <div><label for="r-tel">Teléfono <span class="marca" aria-hidden="true">*</span></label><input id="r-tel" name="telefono" type="tel" autocomplete="tel" required pattern="[0-9 +]{9,}" title="Escribe un teléfono de al menos 9 cifras" /><p class="error" data-error-para="telefono"></p></div>
+      </Formulario>
+    </div>
+  </dialog>
+
+  <section class="franja franja--amarilla"><div class="contenedor"><Preguntas tema="clases" titulo="Sobre las clases" /></div></section>
+</Base>
+
+<script>
+  type S = { id: string; dia: number; hora: string; nombre: string; plazas: number; entrenador: string; duracion: number; sala: string };
+  const raiz = document.getElementById('horario')!;
+  const horario: S[] = JSON.parse(raiz.dataset.horario || '[]');
+  const filtros = document.getElementById('filtros') as HTMLFormElement;
+  const val = (n: string) => (filtros.elements.namedItem(n) as RadioNodeList).value;
+  const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+  const fechaDe = (dia: number) => { const h = new Date(); const d = new Date(h.getFullYear(), h.getMonth(), h.getDate() + ((dia - h.getDay() + 7) % 7)); return d; };
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const libres = (fecha: string, id: string, plazas: number) => {
+    let h = 11; const t = `${fecha}|${id}`;
+    for (let i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) % 997;
+    return Math.max(0, plazas - Math.round(plazas * (0.35 + (h % 60) / 100)));
+  };
+
+  // Fechas y plazas de la próxima ocurrencia de cada sesión
+  document.querySelectorAll<HTMLElement>('.fecha-dia').forEach((el) => {
+    el.textContent = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' }).format(fechaDe(Number(el.dataset.dia)));
+  });
+  document.querySelectorAll<HTMLElement>('.sesion').forEach((el) => {
+    const s = horario.find((x) => x.id === el.dataset.id)!;
+    const l = libres(iso(fechaDe(s.dia)), s.id, s.plazas);
+    const p = el.querySelector<HTMLElement>('.plazas')!;
+    p.textContent = l === 0 ? 'COMPLETA' : `${l} LIBRES`;
+    p.classList.toggle('lleno', l === 0);
+    const b = el.querySelector<HTMLButtonElement>('button')!;
+    if (l === 0) { b.disabled = true; }
+  });
+
+  function filtrar() {
+    const tipo = val('tipo'), dia = val('dia'), nivel = val('nivel');
+    let n = 0;
+    document.querySelectorAll<HTMLElement>('.sesion').forEach((el) => {
+      const s = horario.find((x) => x.id === el.dataset.id)!;
+      const ok = (!tipo || el.dataset.tipo === tipo) && (!dia || String(s.dia) === dia) && (!nivel || Number(el.dataset.nivel) <= Number(nivel));
+      el.hidden = !ok; if (ok) n++;
+    });
+    document.querySelectorAll<HTMLElement>('.dia-bloque').forEach((b) => { b.hidden = !b.querySelector('.sesion:not([hidden])'); });
+    document.getElementById('resultados')!.textContent = `${n} ${n === 1 ? 'clase' : 'clases'}`;
+    document.getElementById('vacio')!.hidden = n > 0;
+  }
+  filtros.addEventListener('change', filtrar);
+  const q = new URLSearchParams(location.search);
+  const t0 = q.get('tipo');
+  if (t0) { const r = filtros.querySelector<HTMLInputElement>(`input[name="tipo"][value="${t0}"]`); if (r) r.checked = true; }
+  filtrar();
+
+  // Diálogo de reserva
+  const dlg = document.getElementById('dialogo-reserva') as HTMLDialogElement;
+  let origen: HTMLElement | null = null;
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-reservar]');
+    if (!b) return;
+    const s = horario.find((x) => x.id === b.dataset.reservar)!;
+    const f = fechaDe(s.dia);
+    document.getElementById('dialogo-detalle')!.textContent = `${s.nombre} · ${new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(f)} a las ${s.hora}`;
+    (document.getElementById('campo-sesion') as HTMLInputElement).value = s.id;
+    (document.getElementById('campo-fecha') as HTMLInputElement).value = iso(f);
+    origen = b; dlg.showModal();
+  });
+  document.getElementById('dialogo-cerrar')!.addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { dlg.querySelector<HTMLElement>('[data-estado]')!.innerHTML = ''; origen?.focus(); });
+</script>

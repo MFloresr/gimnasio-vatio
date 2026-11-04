@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import Preguntas from '../components/Preguntas.astro';
+import { getTarifas } from '../lib/contenido';
+import { sitio } from '../lib/sitio';
+
+const tarifas = await getTarifas();
+const datos = {
+  planes: tarifas.map((t) => ({ id: t.id, nombre: t.data.nombre, mensual: t.data.mensual })),
+  matricula: sitio.matricula,
+  personal: 28,
+  taquilla: 9,
+};
+---
+
+<Base titulo="Tarifas y calculadora de cuota" descripcion="Tres planes sin permanencia en la cuota mensual. Calcula cuánto pagarías con tu plan, periodo, entrenamientos personales y descuentos.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Tarifas</h1>
+    <p>Elige plan, periodo y extras. Te enseñamos la cuenta completa antes de apuntarte.</p>
+  </div>
+
+  <section class="franja" style="padding-top:20px">
+    <div class="contenedor calculadora" id="calc" data-calc={JSON.stringify(datos)}>
+      <form id="form-calc" aria-label="Calculadora de cuota">
+        <fieldset>
+          <legend>1. Plan</legend>
+          {tarifas.map((t, i) => (
+            <label class="opcion-c">
+              <input type="radio" name="plan" value={t.id} checked={t.data.destacada} />
+              <span><strong>{t.data.nombre}</strong><small>{t.data.clasesSemana}</small></span>
+              <span class="p num">{t.data.mensual} €/mes</span>
+            </label>
+          ))}
+        </fieldset>
+        <fieldset>
+          <legend>2. Periodo</legend>
+          <label class="opcion-c"><input type="radio" name="periodo" value="1" checked /><span><strong>Mensual</strong><small>Sin permanencia</small></span><span class="p">Precio normal</span></label>
+          <label class="opcion-c"><input type="radio" name="periodo" value="3" /><span><strong>Trimestral</strong><small>Pago cada tres meses</small></span><span class="p">-8 %</span></label>
+          <label class="opcion-c"><input type="radio" name="periodo" value="12" /><span><strong>Anual</strong><small>Pago único y matrícula gratis</small></span><span class="p">-15 %</span></label>
+        </fieldset>
+        <fieldset>
+          <legend>3. Extras</legend>
+          <div style="margin-bottom:10px">
+            <label for="c-personal" style="font-weight:800;display:block;margin-bottom:6px">Sesiones de entrenamiento personal al mes</label>
+            <select id="c-personal" name="personal">
+              <option value="0">Ninguna</option><option value="1">1 sesión</option><option value="2">2 sesiones</option><option value="4">4 sesiones</option>
+            </select>
+          </div>
+          <label class="opcion-c"><input type="checkbox" name="taquilla" /><span><strong>Taquilla fija y toalla</strong><small>Tu taquilla, tu toalla</small></span><span class="p num">+9 €/mes</span></label>
+          <label class="opcion-c"><input type="checkbox" name="pareja" /><span><strong>Nos apuntamos dos personas</strong><small>Descuento a cada una</small></span><span class="p">-10 %</span></label>
+        </fieldset>
+      </form>
+
+      <aside class="total-caja" aria-live="polite">
+        <h2>Tu cuota</h2>
+        <p class="gran" id="t-mes"><span class="led">0</span></p>
+        <p style="margin:-6px 0 0;color:#d5d5c4">al mes, por persona</p>
+        <dl>
+          <div><dt>Plan</dt><dd id="t-plan"></dd></div>
+          <div><dt>Extras al mes</dt><dd id="t-extras"></dd></div>
+          <div><dt>Descuentos</dt><dd id="t-desc"></dd></div>
+          <div><dt>Matrícula (una vez)</dt><dd id="t-mat"></dd></div>
+          <div><dt>Primer pago</dt><dd id="t-primero"></dd></div>
+        </dl>
+        <a class="btn" href="/prueba-gratis/">Probar una semana gratis</a>
+        <p style="font-size:0.88rem;color:#c4c4b4;margin:12px 0 0">Precios con IVA incluido. Los descuentos no se acumulan con otras promociones.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="franja franja--amarilla"><div class="contenedor"><Preguntas tema="tarifas" titulo="Sobre las tarifas" /></div></section>
+</Base>
+
+<script>
+  const raiz = document.getElementById('calc')!;
+  const D = JSON.parse(raiz.dataset.calc || '{}');
+  const f = document.getElementById('form-calc') as HTMLFormElement;
+  const eur = (n: number) => `${new Intl.NumberFormat('es-ES', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }).format(n)} €`;
+  const $ = (id: string) => document.getElementById(id)!;
+  const val = (n: string) => (f.elements.namedItem(n) as RadioNodeList | HTMLInputElement).value;
+
+  function calcular() {
+    const plan = D.planes.find((p: { id: string }) => p.id === val('plan'));
+    const meses = Number(val('periodo'));
+    const personal = Number(val('personal'));
+    const taquilla = (f.elements.namedItem('taquilla') as HTMLInputElement).checked;
+    const pareja = (f.elements.namedItem('pareja') as HTMLInputElement).checked;
+    const extras = personal * D.personal + (taquilla ? D.taquilla : 0);
+    const bruto = plan.mensual + extras;
+    // Periodo y pareja se acumulan multiplicando: primero el periodo, luego la pareja
+    const dp = meses === 12 ? 0.15 : meses === 3 ? 0.08 : 0;
+    const mes = bruto * (1 - dp) * (pareja ? 0.9 : 1);
+    const mat = meses === 12 ? 0 : D.matricula;
+    $('t-mes').innerHTML = `<span class="led">${new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2, minimumFractionDigits: mes % 1 ? 2 : 0 }).format(mes)}</span> €`;
+    $('t-plan').textContent = `${plan.nombre} · ${eur(plan.mensual)}`;
+    $('t-extras').textContent = extras ? `+ ${eur(extras)}` : 'Ninguno';
+    const partes = [dp ? `${Math.round(dp * 100)} % periodo` : '', pareja ? '10 % pareja' : ''].filter(Boolean);
+    $('t-desc').textContent = partes.length ? partes.join(' + ') : 'Ninguno';
+    $('t-mat').textContent = mat ? eur(mat) : 'Gratis';
+    $('t-primero').textContent = eur(Math.round((mes * meses + mat) * 100) / 100);
+  }
+  f.addEventListener('change', calcular);
+  calcular();
+</script>

@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getZonas } from '../lib/contenido';
+import gymnation from '../assets/fotos/gymnation.jpg';
+import crossfit from '../assets/fotos/crossfit.jpg';
+import cinta from '../assets/fotos/cinta.jpg';
+import pesa from '../assets/fotos/pesa-rusa.jpg';
+
+const zonas = await getZonas();
+const fotos: Record<string, { img: ImageMetadata; alt: string }> = {
+  pesas: { img: pesa, alt: 'Pesa rusa de 12 kilos sobre el suelo del gimnasio' },
+  funcional: { img: crossfit, alt: 'Sala de entrenamiento funcional con cuerdas, cajones y personas entrenando' },
+  cardio: { img: cinta, alt: 'Persona corriendo en una cinta en la zona de cardio' },
+  movilidad: { img: gymnation, alt: 'Sala amplia con máquinas y suelo de goma' },
+};
+---
+
+<Base titulo="Instalaciones" descripcion="Sala de fuerza, sala funcional, zona de cardio y sala de movilidad: 940 m² para entrenar.">
+  <div class="contenedor cabecera-pagina">
+    <h1>La sala</h1>
+    <p>940 metros cuadrados repartidos en cuatro zonas, cada una pensada para un tipo de entrenamiento.</p>
+  </div>
+  <section class="franja" style="padding-top:20px">
+    <div class="contenedor zonas">
+      {zonas.map((z) => (
+        <article class="zona">
+          <div class="foto-bn"><Image src={fotos[z.id].img} alt={fotos[z.id].alt} widths={[500, 800, 1100]} sizes="(min-width: 900px) 45vw, 100vw" style="aspect-ratio:4/3;height:100%" /></div>
+          <div class="zona__texto">
+            <p class="metros led">{z.data.metros} M²</p>
+            <h2>{z.data.nombre}</h2>
+            <p>{z.data.texto}</p>
+            <ul class="lista">{z.data.equipamiento.map((e) => <li>{e}</li>)}</ul>
+          </div>
+        </article>
+      ))}
+    </div>
+    <div class="contenedor"><p class="letra-pequena" style="margin-top:18px">Las zonas, metros y equipamiento son de ejemplo. Las fotos son de otros gimnasios y se sustituyen por las del cliente.</p></div>
+  </section>
+  <section class="franja franja--amarilla"><div class="contenedor dos"><div><h2>Pruébalo</h2><p class="texto">Una semana gratis, con sala y hasta tres clases dirigidas.</p></div><p><a class="btn btn--negro" href="/prueba-gratis/">Semana gratis</a></p></div></section>
+</Base>

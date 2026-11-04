@@ -1,0 +1,40 @@
+[
+ {
+  "id": "sala",
+  "nombre": "Sala",
+  "mensual": 29,
+  "incluye": [
+   "Acceso a la sala de fuerza y cardio",
+   "Horario completo",
+   "App con tus entrenamientos"
+  ],
+  "destacada": false,
+  "clasesSemana": "Sin clases dirigidas"
+ },
+ {
+  "id": "plena",
+  "nombre": "Plena",
+  "mensual": 44,
+  "incluye": [
+   "Todo lo de Sala",
+   "Todas las clases dirigidas",
+   "Reserva de plaza hasta con 7 días",
+   "Una sesión de valoración inicial"
+  ],
+  "destacada": true,
+  "clasesSemana": "Clases ilimitadas"
+ },
+ {
+  "id": "elite",
+  "nombre": "Élite",
+  "mensual": 69,
+  "incluye": [
+   "Todo lo de Plena",
+   "Una sesión mensual de entrenamiento personal",
+   "Plan de entrenamiento a medida",
+   "Toalla y taquilla fija"
+  ],
+  "destacada": false,
+  "clasesSemana": "Clases ilimitadas + personal"
+ }
+]

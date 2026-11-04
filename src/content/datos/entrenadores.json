@@ -1,0 +1,34 @@
+[
+ {
+  "id": "marc",
+  "nombre": "Marc Esteve",
+  "especialidad": "HIIT, boxeo y kettlebell",
+  "texto": "Vino a entrenar para adelgazar y se quedó a enseñar. Cree que una buena clase es la que te deja ganas de volver.",
+  "frase": "No hace falta ir fuerte, hace falta ir hoy.",
+  "anos": 9
+ },
+ {
+  "id": "nora",
+  "nombre": "Nora Pons",
+  "especialidad": "Funcional y remo",
+  "texto": "Fisioterapeuta de formación. Revisa cada técnica con ojo clínico y adapta cada ejercicio a quien tiene delante.",
+  "frase": "Si duele mal, para. Si cuesta bien, sigue.",
+  "anos": 7
+ },
+ {
+  "id": "iker",
+  "nombre": "Iker Alonso",
+  "especialidad": "Fuerza y halterofilia",
+  "texto": "Competidor de halterofilia. Es de pocas palabras y muchos ajustes de técnica.",
+  "frase": "La barra no miente: ni se enfada ni te perdona.",
+  "anos": 12
+ },
+ {
+  "id": "sara",
+  "nombre": "Sara Villar",
+  "especialidad": "Movilidad, yoga y core",
+  "texto": "Empezó con yoga para curar la espalda y hoy la enseña a no tener que curarla. Su clase termina siempre con silencio.",
+  "frase": "Entrena la fuerza, pero cuida el cuerpo que la sostiene.",
+  "anos": 8
+ }
+]

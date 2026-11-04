@@ -1,0 +1,62 @@
+---
+// Marcador de clases de hoy: se calcula en el navegador con la hora real. Sin JavaScript muestra las del lunes.
+import { getHorario } from '../lib/horario';
+import { NOMBRE_DIA } from '../lib/util';
+const horario = await getHorario();
+const lunes = horario.filter((s) => s.dia === 1);
+---
+
+<div class="marcador" id="marcador" data-horario={JSON.stringify(horario)}>
+  <div class="marcador__cabeza"><h2 id="marcador-titulo">Clases de hoy</h2><span class="led" id="marcador-hora">--:--</span></div>
+  <ul id="marcador-lista" aria-live="polite">
+    {lunes.map((s) => (
+      <li><span class="hora led">{s.hora}</span><span class="nombre">{s.nombre}<small>{s.entrenador} · {s.duracion} min</small></span></li>
+    ))}
+  </ul>
+  <p class="vacio" id="marcador-vacio" hidden></p>
+</div>
+<noscript><p class="letra-pequena">Sin JavaScript se muestran las clases del {NOMBRE_DIA[1].toLowerCase()}. <a href="/clases/">Ver todo el horario</a>.</p></noscript>
+
+<script>
+  type S = { id: string; dia: number; hora: string; nombre: string; plazas: number; entrenador: string; duracion: number };
+  const raiz = document.getElementById('marcador')!;
+  const horario: S[] = JSON.parse(raiz.dataset.horario || '[]');
+  const lista = document.getElementById('marcador-lista')!;
+  const titulo = document.getElementById('marcador-titulo')!;
+  const reloj = document.getElementById('marcador-hora')!;
+  const vacio = document.getElementById('marcador-vacio')!;
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+  // Ocupación simulada, estable para cada fecha y sesión (en la web real saldría del sistema de reservas)
+  const libres = (fecha: string, id: string, plazas: number) => {
+    let h = 11; const t = `${fecha}|${id}`;
+    for (let i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) % 997;
+    return Math.max(0, plazas - Math.round(plazas * (0.35 + (h % 60) / 100)));
+  };
+
+  function pintar() {
+    const ahora = new Date();
+    const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(ahora);
+    const g = (t: string) => p.find((x) => x.type === t)!.value;
+    const dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday'));
+    const hora = `${g('hour')}:${g('minute')}`;
+    const fecha = `${g('year')}-${g('month')}-${g('day')}`;
+    reloj.textContent = hora;
+    let verDia = dia, esHoy = true;
+    let sesiones = horario.filter((s) => s.dia === dia);
+    if (!sesiones.some((s) => s.hora >= hora)) { verDia = (dia + 1) % 7; esHoy = false; sesiones = horario.filter((s) => s.dia === verDia); }
+    titulo.textContent = esHoy ? `Hoy, ${DIAS[dia]}` : `Mañana, ${DIAS[verDia]}`;
+    const f = esHoy ? fecha : new Date(ahora.getTime() + 864e5).toISOString().slice(0, 10);
+    const siguiente = esHoy ? sesiones.find((s) => s.hora >= hora)?.id : sesiones[0]?.id;
+    lista.innerHTML = sesiones.map((s) => {
+      const l = libres(f, s.id, s.plazas);
+      const pasada = esHoy && s.hora < hora;
+      return `<li class="${pasada ? 'pasada' : ''} ${s.id === siguiente ? 'siguiente' : ''}"><span class="hora led">${s.hora}</span><span class="nombre">${esc(s.nombre)}<small>${esc(s.entrenador)} · ${s.duracion} min</small></span><span class="plazas led ${l === 0 ? 'lleno' : ''}">${l === 0 ? 'COMPLETA' : l + ' LIBRES'}</span></li>`;
+    }).join('');
+    vacio.hidden = sesiones.length > 0;
+    if (!sesiones.length) vacio.textContent = 'Hoy no hay clases dirigidas. La sala está abierta en su horario.';
+  }
+  pintar();
+  setInterval(pintar, 60000);
+</script>

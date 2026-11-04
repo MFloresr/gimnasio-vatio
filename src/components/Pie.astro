@@ -1,0 +1,49 @@
+---
+import { menu, sitio } from '../lib/sitio';
+const { direccion: d } = sitio;
+---
+
+<footer class="pie">
+  <div class="cinta-peligro" aria-hidden="true"></div>
+  <div class="pie__aviso">Web de demostración: los datos, los entrenadores y las opiniones son de ejemplo. Las reservas no se hacen de verdad.</div>
+  <div class="contenedor pie__contenido">
+    <div class="pie__rejilla">
+      <div>
+        <a class="logo" href="/" translate="no">VATIO<span class="solo-lectores"> gimnasio, ir al inicio</span></a>
+        <p style="margin-top:14px;max-width:32ch">{sitio.eslogan}.</p>
+        <p>{d.calle}<br />{d.cp} {d.ciudad} ({d.provincia})</p>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <ul>
+          <li><a href={`tel:${sitio.telefono}`}>{sitio.telefonoVisible}</a></li>
+          <li><a href={`mailto:${sitio.email}`}>{sitio.email}</a></li>
+          <li><a href={`https://wa.me/${sitio.whatsapp}`}>WhatsApp</a></li>
+          <li><a href="/contacto/">Cómo llegar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Horario</h2>
+        <ul>
+          {sitio.horarios.map((h) => (
+            <li><strong>{h.etiqueta}</strong><br />{h.tramos.length ? h.tramos.map((t) => `${t.abre} a ${t.cierra}`).join(' y ') : 'Cerrado'}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Navegar</h2>
+        <ul>
+          <li><a href="/prueba-gratis/">Semana gratis</a></li>
+          {menu.map((m) => <li><a href={m.href}>{m.texto}</a></li>)}
+          <li><a href="/contacto/">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pie__bajo">
+      <span>© {new Date().getFullYear()} {sitio.nombre}</span>
+      <span>
+        <a href="/aviso-legal/">Aviso legal</a> · <a href="/condiciones-de-reserva/">Condiciones de reserva</a> · <a href="/privacidad/">Privacidad</a> · <a href="/cookies/">Cookies</a> · <a href="/creditos/">Créditos</a>
+      </span>
+    </div>
+  </div>
+</footer>

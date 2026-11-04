@@ -1,0 +1,81 @@
+/* Kit común de las webs de ejemplo: reinicio, accesibilidad, formularios, tablas, preguntas, páginas legales.
+   Cada web define sus tokens (:root) y su estética encima de esto.
+   Tokens que espera: --lienzo --blanco --tinta --tinta-2 --gris --linea --acento --foco --peligro --verde --f-titulo --f-texto --ancho --lado --radio */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 92px; -webkit-text-size-adjust: 100%; }
+[id] { scroll-margin-top: 92px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { margin: 0; font-family: var(--f-texto); font-size: 1.125rem; line-height: 1.6; color: var(--tinta); background: var(--lienzo); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; display: block; }
+img { height: auto; }
+a { color: inherit; text-underline-offset: 0.2em; }
+a, button, summary, label, select, input { touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+h1, h2, h3, h4 { font-family: var(--f-titulo); line-height: 1.05; margin: 0 0 0.5em; text-wrap: balance; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+.num { font-variant-numeric: tabular-nums; }
+.texto { max-width: 62ch; }
+.gris { color: var(--gris); }
+.solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.salto { position: absolute; left: 12px; top: -60px; background: var(--tinta); color: #fff; padding: 12px 18px; z-index: 100; font-weight: 700; }
+.salto:focus { top: 12px; }
+.contenedor { width: 100%; max-width: var(--ancho); margin-inline: auto; padding-inline: var(--lado); }
+.seccion { padding-block: clamp(48px, 8vw, 96px); }
+.migas { font-size: 0.94rem; color: var(--gris); padding-block: 16px 0; }
+.migas a { color: inherit; }
+.cabecera-pagina { padding-block: clamp(28px, 4vw, 52px) 6px; }
+.cabecera-pagina p { max-width: 58ch; color: var(--tinta-2); font-size: 1.25rem; }
+.letra-pequena { font-size: 0.9rem; line-height: 1.5; color: var(--gris); }
+.lista { list-style: none; margin: 0 0 1.2em; padding: 0; }
+.lista li { position: relative; padding: 9px 0 9px 28px; border-bottom: 1px solid var(--linea); }
+.lista li::before { content: ''; position: absolute; left: 2px; top: 19px; width: 14px; height: 3px; background: var(--acento); }
+.prosa { max-width: 66ch; font-size: 1.2rem; line-height: 1.7; }
+.prosa h2 { font-size: 1.9rem; margin-top: 1.5em; }
+.prosa ul, .prosa ol { padding-left: 1.3em; } .prosa li { margin-bottom: 0.5em; }
+.legal h2 { font-size: 1.6rem; margin-top: 1.6em; }
+.legal p, .legal li { max-width: 72ch; }
+.legal ul { padding-left: 1.2em; }
+
+/* Formularios */
+select, input[type='text'], input[type='email'], input[type='tel'], input[type='date'], input[type='number'], textarea {
+  width: 100%; min-height: 52px; padding: 10px 14px; font: inherit; font-size: 1.05rem; color: var(--tinta); background: #fff; border: 2px solid var(--tinta); border-radius: var(--radio);
+}
+textarea { min-height: 120px; resize: vertical; }
+.formulario { background: var(--blanco); border: 2px solid var(--tinta); border-radius: var(--radio); padding: clamp(18px, 3vw, 32px); }
+.formulario .rejilla-campos { display: grid; gap: 16px; }
+@media (min-width: 700px) { .formulario .rejilla-campos { grid-template-columns: 1fr 1fr; } .formulario .ancho-total { grid-column: 1 / -1; } }
+.formulario label, .formulario legend { display: block; font-weight: 700; font-size: 0.98rem; margin-bottom: 6px; padding: 0; }
+.formulario fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.formulario .marca { color: var(--peligro); }
+.formulario .error, .error { color: var(--peligro); font-size: 0.94rem; margin: 4px 0 0; min-height: 1.2em; font-weight: 600; }
+.formulario [aria-invalid='true'] { border-color: var(--peligro); }
+.ayuda { font-size: 0.92rem; color: var(--gris); margin: 4px 0 0; font-weight: 400; }
+.casilla { display: flex; gap: 12px; align-items: flex-start; font-weight: 400 !important; font-size: 0.96rem !important; }
+.casilla input { width: 24px; height: 24px; margin-top: 2px; flex: none; accent-color: var(--acento); }
+.honeypot { position: absolute; left: -9999px; }
+.aviso { padding: 14px 16px; font-weight: 700; margin-top: 16px; background: #def2e6; border-left: 6px solid var(--verde); border-radius: 0 var(--radio) var(--radio) 0; }
+.aviso--error { background: #fbe3e1; border-color: var(--peligro); }
+.aviso--demo { background: #fff3c4; border-color: #d6a400; font-weight: 400; font-size: 0.95rem; }
+
+/* Tablas, preguntas, horario */
+.tabla-envoltorio { overflow-x: auto; background: var(--blanco); border: 2px solid var(--tinta); border-radius: var(--radio); }
+table { border-collapse: collapse; width: 100%; font-size: 1.02rem; }
+th, td { padding: 13px 16px; text-align: left; border-bottom: 1px solid var(--linea); vertical-align: top; }
+tbody tr:last-child > * { border-bottom: 0; }
+thead th { background: var(--tinta); color: #fff; font-weight: 700; font-size: 0.95rem; }
+tbody th { font-weight: 700; }
+td.num, th.num { text-align: right; }
+.preguntas details { background: var(--blanco); border: 2px solid var(--tinta); border-radius: var(--radio); margin-bottom: 10px; }
+.preguntas summary { cursor: pointer; padding: 16px 20px; font: 700 1.15rem/1.25 var(--f-titulo); list-style: none; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.preguntas summary::-webkit-details-marker { display: none; }
+.preguntas summary::after { content: '+'; font: 700 1.7rem/1 var(--f-titulo); color: var(--acento-texto, var(--tinta)); }
+.preguntas details[open] summary::after { content: '–'; }
+.preguntas details p { padding: 0 20px 16px; margin: 0; max-width: 68ch; color: var(--gris); }
+.abierto-ahora { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.abierto-ahora::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #8a949a; }
+.abierto-ahora[data-estado='abierto']::before { background: #29a14a; box-shadow: 0 0 0 4px rgba(41, 161, 74, 0.25); }
+.abierto-ahora[data-estado='cerrado']::before { background: var(--peligro); }
+.dos { display: grid; gap: clamp(24px, 5vw, 64px); }
+@media (min-width: 900px) { .dos { grid-template-columns: 1fr 1fr; align-items: center; } .dos--desigual { grid-template-columns: 1.1fr 0.9fr; } }
+.foto-recta img { width: 100%; height: 100%; object-fit: cover; }
+[hidden] { display: none !important; }

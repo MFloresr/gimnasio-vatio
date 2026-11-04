@@ -1,0 +1,20 @@
+[
+ {
+  "id": "o1",
+  "texto": "Llegué sin saber hacer una sentadilla y a los seis meses levanto mi peso corporal. Las correcciones de Iker son oro.",
+  "nombre": "Laia",
+  "meses": 8
+ },
+ {
+  "id": "o2",
+  "texto": "Reservo en el móvil, me presento y me dejo hacer. Cuarenta minutos y he cumplido con el día.",
+  "nombre": "Jordi",
+  "meses": 14
+ },
+ {
+  "id": "o3",
+  "texto": "Por fin un gimnasio donde nadie te mira raro por ir despacio. La clase de movilidad me ha cambiado la espalda.",
+  "nombre": "Carme",
+  "meses": 5
+ }
+]

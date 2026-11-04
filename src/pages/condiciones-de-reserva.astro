@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { sitio } from '../lib/sitio';
+---
+
+<Base titulo="Condiciones de reserva" descripcion="Cómo funcionan las citas: confirmación, cambios, cancelaciones y retrasos." noindex>
+  <div class="contenedor cabecera-pagina"><h1>Condiciones de reserva</h1></div>
+  <section class="seccion legal" style="padding-top:8px">
+    <div class="contenedor">
+      <p class="aviso aviso--demo" style="max-width:72ch">Plantilla de ejemplo. El cliente fija sus propias normas y su asesor las revisa antes de publicar.</p>
+      <h2>Reservas de clases</h2>
+      <p>Cada clase tiene un número limitado de plazas. Puedes reservar hasta con siete días de antelación desde la web o la app. Tu reserva queda confirmada al recibir el mensaje de confirmación.</p>
+      <h2>Cancelaciones</h2>
+      <p>Puedes cancelar sin coste hasta {sitio.cancelacionHoras} horas antes. Si no cancelas y no vienes, podemos restringir tus reservas durante unos días. [El cliente decide esta política.]</p>
+      <h2>Llegada a clase</h2>
+      <p>Se puede entrar durante los primeros cinco minutos. Después, por seguridad, no se permite la entrada.</p>
+      <h2>Salud y responsabilidad</h2>
+      <p>Al apuntarte confirmas que puedes hacer ejercicio físico. Si tienes una lesión o una condición médica, coméntalo con el entrenador antes de empezar. [El cliente y su asesor revisan esta cláusula.]</p>
+      <h2>Cuotas</h2>
+      <p>Los precios incluyen IVA. Las condiciones de permanencia, pausa y baja se detallan en el contrato de inscripción. [El cliente fija sus condiciones.]</p>
+      </div>
+  </section>
+</Base>

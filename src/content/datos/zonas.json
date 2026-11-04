@@ -1,0 +1,52 @@
+[
+ {
+  "id": "pesas",
+  "nombre": "Sala de fuerza",
+  "texto": "Racks, plataformas de halterofilia y mancuernas hasta 60 kg. El suelo es de goma y el ambiente, de trabajo.",
+  "metros": 420,
+  "equipamiento": [
+   "6 racks de sentadilla",
+   "2 plataformas",
+   "Mancuernas hasta 60 kg",
+   "Barras olímpicas",
+   "Bancos regulables"
+  ]
+ },
+ {
+  "id": "funcional",
+  "nombre": "Sala funcional",
+  "texto": "Un espacio abierto con cajones, cuerdas, sacos y pesas rusas para las clases de HIIT, boxeo y kettlebell.",
+  "metros": 260,
+  "equipamiento": [
+   "Pesas rusas de 4 a 32 kg",
+   "Cuerdas de batalla",
+   "Cajones pliométricos",
+   "Sacos de boxeo",
+   "Cuatro remos indoor"
+  ]
+ },
+ {
+  "id": "cardio",
+  "nombre": "Zona de cardio",
+  "texto": "Cintas, bicicletas y remos, con vistas a la calle y pantalla para seguir tus series.",
+  "metros": 150,
+  "equipamiento": [
+   "8 cintas de correr",
+   "6 bicicletas",
+   "Elípticas",
+   "Remos"
+  ]
+ },
+ {
+  "id": "movilidad",
+  "nombre": "Sala de movilidad",
+  "texto": "Silenciosa, con luz suave, colchonetas y bloques. Aquí se estira, se respira y se baja el ritmo.",
+  "metros": 110,
+  "equipamiento": [
+   "Colchonetas",
+   "Bloques y correas",
+   "Rodillos de espuma",
+   "Pelotas de masaje"
+  ]
+ }
+]

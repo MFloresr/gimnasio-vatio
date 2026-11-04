@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { getEntrenadores } from '../lib/contenido';
+
+const entrenadores = await getEntrenadores();
+---
+
+<Base titulo="Entrenadores" descripcion="Los cuatro entrenadores de Vatio: especialidad, experiencia y cómo entrenan.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Entrenadores</h1>
+    <p>Cuatro personas, cuatro maneras de entrenar y una misma idea: que lo hagas bien.</p>
+  </div>
+  <section class="franja" style="padding-top:20px">
+    <div class="contenedor">
+      <div class="equipo">
+        {entrenadores.map((e) => (
+          <article class="entrenador">
+            <p class="entrenador__num led" aria-hidden="true">{e.data.anos}</p>
+            <p class="letra-pequena" style="margin:0 0 8px;font-weight:700">años entrenando</p>
+            <h2>{e.data.nombre}</h2>
+            <p class="esp">{e.data.especialidad}</p>
+            <p>{e.data.texto}</p>
+            <blockquote>«{e.data.frase}»</blockquote>
+          </article>
+        ))}
+      </div>
+      <p class="letra-pequena" style="margin-top:18px">Los nombres y perfiles son de ejemplo. El cliente los sustituye por los de su equipo y sus titulaciones reales.</p>
+    </div>
+  </section>
+</Base>

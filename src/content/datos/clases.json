@@ -1,0 +1,122 @@
+[
+ {
+  "id": "fuerza-base",
+  "nombre": "Fuerza base",
+  "tipo": "fuerza",
+  "nivel": 1,
+  "intensidad": 4,
+  "duracion": 60,
+  "plazas": 14,
+  "sala": "Sala de pesas",
+  "descripcion": "Sentadilla, peso muerto y press con barra, con técnica guiada. Se sube de peso poco a poco y con control.",
+  "paraQuien": "Para quien empieza con pesas o quiere ordenar su técnica."
+ },
+ {
+  "id": "fuerza-pro",
+  "nombre": "Fuerza avanzada",
+  "tipo": "fuerza",
+  "nivel": 3,
+  "intensidad": 5,
+  "duracion": 75,
+  "plazas": 10,
+  "sala": "Sala de pesas",
+  "descripcion": "Series pesadas, tempo y progresión semanal. Se pide experiencia y llevar un registro de cargas.",
+  "paraQuien": "Para quien ya levanta con soltura y busca romper marcas."
+ },
+ {
+  "id": "hiit",
+  "nombre": "HIIT 40",
+  "tipo": "cardio",
+  "nivel": 2,
+  "intensidad": 5,
+  "duracion": 40,
+  "plazas": 18,
+  "sala": "Sala funcional",
+  "descripcion": "Intervalos de trabajo y descanso con peso corporal, kettlebells y cuerda. Termina agotado y con la cabeza despejada.",
+  "paraQuien": "Para quien tiene poco tiempo y quiere gastar mucho."
+ },
+ {
+  "id": "funcional",
+  "nombre": "Funcional",
+  "tipo": "cardio",
+  "nivel": 1,
+  "intensidad": 3,
+  "duracion": 55,
+  "plazas": 18,
+  "sala": "Sala funcional",
+  "descripcion": "Circuitos de cuerpo entero: empujar, tirar, saltar y cargar. Cada ejercicio se adapta a tu nivel.",
+  "paraQuien": "Para todos: cada ejercicio tiene versión fácil y versión difícil."
+ },
+ {
+  "id": "kettlebell",
+  "nombre": "Kettlebell",
+  "tipo": "fuerza",
+  "nivel": 2,
+  "intensidad": 4,
+  "duracion": 45,
+  "plazas": 14,
+  "sala": "Sala funcional",
+  "descripcion": "Balanceos, cargadas y arrancadas con pesa rusa: fuerza, potencia y espalda en una sola clase.",
+  "paraQuien": "Para trabajar fuerza y cardio con poco material."
+ },
+ {
+  "id": "box",
+  "nombre": "Boxeo fitness",
+  "tipo": "combate",
+  "nivel": 1,
+  "intensidad": 4,
+  "duracion": 50,
+  "plazas": 16,
+  "sala": "Sala funcional",
+  "descripcion": "Golpeo al saco, combinaciones y trabajo de pies, sin contacto ni combates.",
+  "paraQuien": "Para soltar tensión y ponerse en forma sin pelear."
+ },
+ {
+  "id": "remo",
+  "nombre": "Remo indoor",
+  "tipo": "cardio",
+  "nivel": 1,
+  "intensidad": 3,
+  "duracion": 45,
+  "plazas": 12,
+  "sala": "Sala funcional",
+  "descripcion": "Técnica de remo y series por tiempo y metros. Cuerpo entero, sin impacto en las articulaciones.",
+  "paraQuien": "Para quien busca cardio con poco impacto."
+ },
+ {
+  "id": "core",
+  "nombre": "Core 30",
+  "tipo": "movilidad",
+  "nivel": 1,
+  "intensidad": 2,
+  "duracion": 30,
+  "plazas": 20,
+  "sala": "Sala de movilidad",
+  "descripcion": "Abdomen, lumbar y estabilidad en media hora. Se hace con colchoneta y sin material.",
+  "paraQuien": "Para cuidar la espalda, sentado o de pie todo el día."
+ },
+ {
+  "id": "movilidad",
+  "nombre": "Movilidad y estiramientos",
+  "tipo": "movilidad",
+  "nivel": 1,
+  "intensidad": 1,
+  "duracion": 50,
+  "plazas": 20,
+  "sala": "Sala de movilidad",
+  "descripcion": "Cadera, hombros y columna con ritmo lento. Para entrenar mejor y lesionarse menos.",
+  "paraQuien": "Para quien rinde mejor cuando se mueve mejor."
+ },
+ {
+  "id": "yoga",
+  "nombre": "Yoga dinámico",
+  "tipo": "movilidad",
+  "nivel": 1,
+  "intensidad": 2,
+  "duracion": 60,
+  "plazas": 18,
+  "sala": "Sala de movilidad",
+  "descripcion": "Secuencias fluidas con respiración y equilibrio. Terminamos con relajación.",
+  "paraQuien": "Para quien quiere fuerza, flexibilidad y calma."
+ }
+]

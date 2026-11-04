@@ -1,0 +1,44 @@
+[
+ {
+  "id": "q1",
+  "tema": "clases",
+  "pregunta": "¿Tengo que reservar las clases?",
+  "respuesta": "Sí. Cada clase tiene plazas limitadas para que el entrenador pueda corregirte. Reserva desde la web o la app hasta 7 días antes y cancela hasta 3 horas antes sin penalización."
+ },
+ {
+  "id": "q2",
+  "tema": "clases",
+  "pregunta": "Soy principiante, ¿por dónde empiezo?",
+  "respuesta": "Por Fuerza base, Funcional o Movilidad: están pensadas para todos los niveles y cada ejercicio tiene una versión más fácil. Te hacemos una valoración inicial gratuita."
+ },
+ {
+  "id": "q3",
+  "tema": "clases",
+  "pregunta": "¿Qué pasa si llego tarde a una clase?",
+  "respuesta": "Puedes entrar durante los primeros cinco minutos. Después, por seguridad, no se permite la entrada porque ya habrá empezado el calentamiento."
+ },
+ {
+  "id": "q4",
+  "tema": "tarifas",
+  "pregunta": "¿Hay permanencia?",
+  "respuesta": "No en la cuota mensual. Si eliges el plan trimestral o anual, el descuento depende de comprometerte ese periodo. [El cliente decide su política.]"
+ },
+ {
+  "id": "q5",
+  "tema": "tarifas",
+  "pregunta": "¿Puedo pausar la cuota?",
+  "respuesta": "Sí: puedes pausarla hasta dos meses al año por viaje, lesión o baja médica. [El cliente decide su política.]"
+ },
+ {
+  "id": "q6",
+  "tema": "general",
+  "pregunta": "¿Puedo probar antes de apuntarme?",
+  "respuesta": "Sí, con una semana de prueba gratuita. Incluye la sala y hasta tres clases dirigidas. Solo necesitas un documento de identidad."
+ },
+ {
+  "id": "q7",
+  "tema": "general",
+  "pregunta": "¿Hace falta certificado médico?",
+  "respuesta": "No es obligatorio, pero te pedimos que rellenes un cuestionario de salud sencillo y, si tienes alguna lesión o condición médica, que lo comentes con el entrenador."
+ }
+]
